@@ -1,0 +1,7 @@
+將新生成的D:\temp\movielist.html改名為movielistN.html
+放到C:\Users\Sean.Chiu\Documents\GitHub\movies\
+把舊的movielist.html 改名為movielistO.html
+
+點選movielist.exe
+
+將生成的movielist-Combie.html 改名為movielist.html
