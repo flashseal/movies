@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html>
@@ -40,7 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="main.js"></script>
 </head>
 <body>
-<h1 class="center">Movies</h1>
+<div style="text-align: center; margin-bottom: 10px;">
+<h1 class="center" style="display: inline-block; margin: 0;">Movies</h1>
+<a href="MovieListH.html" style="display: inline-block; margin-left: 10px;">顯示按分數排列</a>
+</div>
 <nav>
 <input id="movietitle" name="movietitle" placeholder="title" value=""/>
 <label class="icon" for="movietitle">
@@ -53,7 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
 =============================在這後面加入電影================
 --><!--=============================在這後面加入電影================--><!--
 =============================2025================
---><div class="movie" data-id="tt1312221" data-title="科學怪人 2025" id="tt1312221">
+--><div class="movie" data-id="tt30144839" data-title="一戰再戰 2025" id="tt30144839">
+<a href="movies/One%20Battle%20After%20Another%20%E4%B8%80%E6%88%B0%E5%86%8D%E6%88%B0%20%282025%29.html">
+<img class="poster" data-src="images/One%20Battle%20After%20Another%20%E4%B8%80%E6%88%B0%E5%86%8D%E6%88%B0%20%282025%29-POSTER.thumb.jpg" loading="lazy"/>
+</a>
+<p><a href="movies/One%20Battle%20After%20Another%20%E4%B8%80%E6%88%B0%E5%86%8D%E6%88%B0%20%282025%29.html">One Battle After Another</a></p>一戰再戰
+<p>2025~tmdb - 7.50/10</p>
+</div>
+
+<div class="movie" data-id="tt30254719" data-title="全知讀者視角 2025" id="tt30254719">
+<a href="movies/%EC%A0%84%EC%A7%80%EC%A0%81%20%EB%8F%85%EC%9E%90%20%EC%8B%9C%EC%A0%90%20%E5%85%A8%E7%9F%A5%E8%AE%80%E8%80%85%E8%A6%96%E8%A7%92%20%282025%29.html">
+<img class="poster" data-src="images/%EC%A0%84%EC%A7%80%EC%A0%81%20%EB%8F%85%EC%9E%90%20%EC%8B%9C%EC%A0%90%20%E5%85%A8%E7%9F%A5%E8%AE%80%E8%80%85%E8%A6%96%E8%A7%92%20%282025%29-POSTER.thumb.jpg" loading="lazy"/>
+</a>
+<p><a href="movies/%EC%A0%84%EC%A7%80%EC%A0%81%20%EB%8F%85%EC%9E%90%20%EC%8B%9C%EC%A0%90%20%E5%85%A8%E7%9F%A5%E8%AE%80%E8%80%85%E8%A6%96%E8%A7%92%20%282025%29.html">전지적 독자 시점</a></p>全知讀者視角
+<p>2025~tmdb - 6.70/10</p>
+</div>
+
+<div class="movie" data-id="tt1312221" data-title="科學怪人 2025" id="tt1312221">
 <a href="movies/Frankenstein%20%E7%A7%91%E5%AD%B8%E6%80%AA%E4%BA%BA%20%282025%29.html">
 <img class="poster" data-src="images/Frankenstein%20%E7%A7%91%E5%AD%B8%E6%80%AA%E4%BA%BA%20%282025%29-POSTER.thumb.jpg" loading="lazy"/>
 </a>
@@ -4495,11 +4515,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
 </div>
-
-
-
 </body>
 </html>
-
-
