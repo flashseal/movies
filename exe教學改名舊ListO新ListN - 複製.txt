@@ -4,4 +4,4 @@
 
 點選movielist.exe
 
-將生成的movielist-Combie.html 改名為movielist.html
+將生成的MovieList-Combie.html 改名為MovieList.html
