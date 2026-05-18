@@ -43,24 +43,31 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) return;
 
   const movies = Array.from(container.getElementsByClassName('movie'));
-
-  // 儲存後端原始排序（依年份）
   const originalOrder = movies.slice();
 
+  // 修正版：精確抓取包含 tmdb 的 p 標籤
   function parseScore(movie) {
-    const txt = movie.querySelector('p:last-child').innerText;
-    return parseFloat(txt.split(' - ')[1].split('/')[0]);
+    const pTags = Array.from(movie.querySelectorAll('p'));
+    const tmdbP = pTags.find(p => p.innerText.includes('tmdb'));
+    if (!tmdbP) return 0;
+    
+    try {
+      const txt = tmdbP.innerText;
+      return parseFloat(txt.split(' - ')[1].split('/')[0]);
+    } catch(e) {
+      return 0;
+    }
   }
 
-  // 加上 🔥高分標記（避免重複）
+  // 修正版：高分標籤塞在分數那行的後面
   function addHighScoreTag(movie) {
     const score = parseScore(movie);
     if (score < 7) return;
 
-    const lastP = movie.querySelector('p:last-child');
+    const pTags = Array.from(movie.querySelectorAll('p'));
+    const lastP = pTags.find(p => p.innerText.includes('tmdb'));
     if (!lastP) return;
 
-    // 避免重複新增（檢查是否已有 🔥）
     if (lastP.innerHTML.includes("🔥高分")) return;
 
     const tag = document.createElement('span');
@@ -72,21 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // 預設顯示年份排序
   originalOrder.forEach(addHighScoreTag);
 
-  // 依年份排序（回復初始順序）
+  // 依年份排序
   document.getElementById('sort-year').addEventListener('click', () => {
     container.innerHTML = "";
     originalOrder.forEach(m => container.appendChild(m));
   });
 
-  // 依分數排序（降序）
+  // 依分數排序
   document.getElementById('sort-score').addEventListener('click', () => {
     const sorted = movies.slice().sort((a, b) => {
       return parseScore(b) - parseScore(a);
     });
 
-    // 加上高分標籤（有的就不加）
     sorted.forEach(addHighScoreTag);
-
     container.innerHTML = "";
     sorted.forEach(m => container.appendChild(m));
   });
