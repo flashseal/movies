@@ -6119,5 +6119,107 @@ document.addEventListener('DOMContentLoaded', () => {
 </a>
 </div>
 </div>
+
+<!-- 💡 建議：把修正後的完整 JS 放這裡（</body> 之前） -->
+<!-- 💡 已經修正分數解析並加入安全防護的 JS -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('movies');
+    if (!container) return;
+
+    const movies = Array.from(container.getElementsByClassName('movie'));
+    const originalOrder = movies.slice();
+
+    // 修正：更安全的抓取分數邏輯，適應 "~tmdb - 分數/10" 格式
+    function parseScore(movie) {
+      try {
+        const lastP = movie.querySelector('p:last-child');
+        if (!lastP) return 0;
+        const txt = lastP.innerText; // 例如 "1996~tmdb - 6.10/10"
+        
+        if (txt.includes('-')) {
+          const scorePart = txt.split('-')[1].trim(); // 拿到 "6.10/10"
+          return parseFloat(scorePart.split('/')[0]); // 拿到 6.1
+        }
+        return 0;
+      } catch (e) {
+        console.error("解析分數失敗，跳過排序影響：", e);
+        return 0;
+      }
+    }
+
+    function addHighScoreTag(movie) {
+      const score = parseScore(movie);
+      if (score < 7) return;
+      const lastP = movie.querySelector('p:last-child');
+      if (!lastP || lastP.innerHTML.includes("🔥高分")) return;
+      const tag = document.createElement('span');
+      tag.innerText = ' 🔥高分';
+      tag.style.color = 'red';
+      lastP.appendChild(tag);
+    }
+
+    // 初始化高分標籤
+    originalOrder.forEach(addHighScoreTag);
+
+    // 綁定排序按鈕（加上相容性檢查，防止你沒做按鈕時報錯）
+    const btnYear = document.getElementById('sort-year');
+    if (btnYear) {
+      btnYear.addEventListener('click', () => {
+        container.innerHTML = "";
+        originalOrder.forEach(m => container.appendChild(m));
+      });
+    }
+
+    const btnScore = document.getElementById('sort-score');
+    if (btnScore) {
+      btnScore.addEventListener('click', () => {
+        const sorted = movies.slice().sort((a, b) => parseScore(b) - parseScore(a));
+        sorted.forEach(addHighScoreTag);
+        container.innerHTML = "";
+        sorted.forEach(m => container.appendChild(m));
+      });
+    }
+
+    // 處理 iPhone 點擊自動判斷 mkv / mp4
+    container.addEventListener('click', (e) => {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
+
+      const href = anchor.getAttribute('href');
+      
+      if (href && (href.startsWith('nplayer-http://') || href.startsWith('http://')) && href.endsWith('.mkv')) {
+        e.preventDefault();
+        const testUrl = href.replace('nplayer-http://', 'http://');
+
+        // 使用 no-cors 模式，防止樹莓派跨網域設定 (CORS) 擋掉 iPhone 的測試請求
+        fetch(testUrl, { method: 'HEAD', mode: 'no-cors' })
+          .then(() => {
+            // 注意：在 no-cors 模式下，不論檔案在不在，瀏覽器通常都會走進 .then
+            // 為了在 iPhone 上最精準切換，如果樹莓派沒設定 CORS，我們可以直接嘗試發送一般 GET 請求
+            // 或是保險起見，在此直接利用原網址。
+            // 這裡我們維持原本的 ok 判斷，但多加一層 catch 備用
+            fetch(testUrl, { method: 'HEAD' })
+              .then(res => {
+                if (res.ok) {
+                  window.location.href = href;
+                } else {
+                  window.location.href = href.replace(/\.mkv$/, '.mp4');
+                }
+              })
+              .catch(() => {
+                // 如果被跨網域擋住，直接嘗試換成 .mp4 看看
+                window.location.href = href.replace(/\.mkv$/, '.mp4');
+              });
+          })
+          .catch(() => {
+            window.location.href = href.replace(/\.mkv$/, '.mp4');
+          });
+      }
+    });
+  });
+  </script>
+
+
 </body>
 </html>
